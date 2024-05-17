@@ -197,9 +197,19 @@ export interface TableControlSchema
   showIndex?: boolean;
 
   /**
-   * 分页个数，默认不分页
+   * 分页个数
    */
   perPage?: number;
+
+  /**
+   * 默认只有当分页数大于 1 是才显示，如果总是想显示请配置。
+   */
+  alwaysShowPagination?: boolean;
+
+  /**
+   * 分页器layout
+   */
+  paginationLayout?: string;
 
   /**
    * 限制最大个数
@@ -1797,6 +1807,8 @@ export default class FormTable extends React.Component<TableProps, TableState> {
       prefixRow,
       formInited,
       perPage,
+      alwaysShowPagination,
+      paginationLayout,
       classnames: cx,
       rowClassName,
       rowClassNameExpr,
@@ -1817,7 +1829,7 @@ export default class FormTable extends React.Component<TableProps, TableState> {
     }
 
     let items = this.state.items;
-    let showPager = false;
+    let showPager = alwaysShowPagination || false;
     let page = this.state.page || 1;
     let offset = 0;
     let lastPage = 1;
@@ -1908,6 +1920,7 @@ export default class FormTable extends React.Component<TableProps, TableState> {
                   {
                     activePage: page,
                     perPage,
+                    layout: paginationLayout,
                     total: this.state.items.length,
                     onPageChange: this.handlePageChange,
                     className: 'InputTable-pager',
